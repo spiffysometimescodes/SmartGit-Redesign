@@ -1,29 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const [isDocumentationDropdownOpen, setIsDocumentationDropdownOpen] = useState(false);
-  const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(false);
 
-  const handleDocumentationMouseEnter = () => {
-    setIsDocumentationDropdownOpen(true);
-  };
+  useEffect(() => {
+    let prevScrollPos = window.pageYOffset;
 
-  const handleDocumentationMouseLeave = () => {
-    setIsDocumentationDropdownOpen(false);
-  };
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      const scrollingDown = prevScrollPos < currentScrollPos;
 
-  const handleAboutMouseEnter = () => {
-    setIsAboutDropdownOpen(true);
-  };
+      setShowNavbar(!scrollingDown);
+      prevScrollPos = currentScrollPos;
+    };
 
-  const handleAboutMouseLeave = () => {
-    setIsAboutDropdownOpen(false);
-  };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="App">
-      <header className="navbar">
+      <header className="scrolling-navbar">
         <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img
             src="https://rhwlchgsdkmlgvnnhpsr.supabase.co/storage/v1/object/sign/smartgit/Assets/Smartgit%20Logo%20White.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzbWFydGdpdC9Bc3NldHMvU21hcnRnaXQgTG9nbyBXaGl0ZS5wbmciLCJpYXQiOjE3NDM5NzAyNTgsImV4cCI6MTc0NjU2MjI1OH0.N0TD9jYSx0ttDWtzvnGl1WX0xNds1L5VdCgRVEcl9eM"
@@ -31,35 +30,51 @@ function App() {
             style={{ height: '38px', width: '180px' }}
           />
         </h1>
-        <nav>
+        <nav style={{ marginLeft: 'auto' }}>
           <a href="#">Pricing</a>
           <a href="#">Feature Hub</a>
-          <div
-            className="dropdown"
-            onMouseEnter={handleDocumentationMouseEnter}
-            onMouseLeave={handleDocumentationMouseLeave}
-          >
+          <div className="dropdown">
             <a href="#">Documentation</a>
-            {isDocumentationDropdownOpen && (
-              <div className="dropdown-content">
-                <a href="#">Release Notes</a>
-                <a href="#">Developer's Hub</a>
-                <a href="#">Learning Centre</a>
-              </div>
-            )}
+            <div className="dropdown-content">
+              <a href="#">Release Notes</a>
+              <a href="#">Developer's Hub</a>
+              <a href="#">Learning Centre</a>
+            </div>
           </div>
-          <div
-            className="dropdown"
-            onMouseEnter={handleAboutMouseEnter}
-            onMouseLeave={handleAboutMouseLeave}
-          >
+          <div className="dropdown">
             <a href="#">About</a>
-            {isAboutDropdownOpen && (
-              <div className="dropdown-content">
-                <a href="#">Company</a>
-                <a href="#">Careers</a>
-              </div>
-            )}
+            <div className="dropdown-content">
+              <a href="#">Company</a>
+              <a href="#">Careers</a>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <header className={`navbar ${showNavbar ? 'hidden' : ''}`}>
+        <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <img
+            src="https://rhwlchgsdkmlgvnnhpsr.supabase.co/storage/v1/object/sign/smartgit/Assets/Smartgit%20Logo%20White.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJzbWFydGdpdC9Bc3NldHMvU21hcnRnaXQgTG9nbyBXaGl0ZS5wbmciLCJpYXQiOjE3NDM5NzAyNTgsImV4cCI6MTc0NjU2MjI1OH0.N0TD9jYSx0ttDWtzvnGl1WX0xNds1L5VdCgRVEcl9eM"
+            alt="SmartGit Logo"
+            style={{ height: '38px', width: '180px' }}
+          />
+        </h1>
+        <nav style={{ marginLeft: 'auto' }}>
+          <a href="#">Pricing</a>
+          <a href="#">Feature Hub</a>
+          <div className="dropdown">
+            <a href="#">Documentation</a>
+            <div className="dropdown-content">
+              <a href="#">Release Notes</a>
+              <a href="#">Developer's Hub</a>
+              <a href="#">Learning Centre</a>
+            </div>
+          </div>
+          <div className="dropdown">
+            <a href="#">About</a>
+            <div className="dropdown-content">
+              <a href="#">Company</a>
+              <a href="#">Careers</a>
+            </div>
           </div>
         </nav>
       </header>
